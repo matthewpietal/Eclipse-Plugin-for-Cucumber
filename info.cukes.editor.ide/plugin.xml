@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="info.cukes.editor.FeatureEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="feature"
+            icon="icons/cucumber16x.png"
+            id="info.cukes.editor.CucumberEditor"
+            name="Cucumber Editor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.core.filebuffers.annotationModelCreation">
+      <factory
+            class="info.cukes.editor.annotation.CucumberAnnotationModelFactory"
+            extensions="feature">
+      </factory>
+   </extension>
+
+</plugin>

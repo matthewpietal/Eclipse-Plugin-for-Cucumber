@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Cucumber Plugin Playground
+Bundle-SymbolicName: info.cukes.editor.ide.playground;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: info.cukes.editor.ide.playground.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.filesystem;bundle-version="1.3.1",
+ org.eclipse.ui.ide;bundle-version="3.6.1",
+ org.eclipse.ui.editors;bundle-version="3.6.1",
+ org.eclipse.jdt.ui;bundle-version="3.6.1",
+ org.eclipse.ui;bundle-version="3.6.2",
+ org.eclipse.core.resources;bundle-version="3.6.1",
+ org.eclipse.ui.navigator;bundle-version="3.5.0",
+ org.eclipse.ui.navigator.resources;bundle-version="3.4.0",
+ org.eclipse.jdt;bundle-version="3.7.0",
+ org.eclipse.jdt.core;bundle-version="3.7.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: cucumber-java-1.0.0.RC16.jar,
+ .

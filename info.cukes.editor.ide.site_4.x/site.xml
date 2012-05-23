@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/info.cukes.editor.feature_3.0.0.201205160825.jar" id="info.cukes.editor.feature" version="3.0.0.201205160825"/>
+</site>
