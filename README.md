@@ -8,6 +8,12 @@ In Eclipse, use the "Help->Install New Software" menu item.  Click the "Add..." 
 * Eclipse 3.7: https://raw.github.com/matthewpietal/Eclipse-Plugin-for-Cucumber/master/info.cukes.editor.ide.site_3.x/
 * Eclipse 4.2: https://raw.github.com/matthewpietal/Eclipse-Plugin-for-Cucumber/master/info.cukes.editor.ide.site_4.x/
 
+## Features
+* Syntax Highlighting
+* Validation: Scans your workspace for potential matching rules.  Will give you a warning if no rule is found.
+* Rule suggestion: Type Given, When, Then, followed by CTRL+space to see all matching rules defined in your workspace. 
+* Jump to defintion: For rules that match, hit F3 to jump to the Java code defined for that rule
+
 ## Project Layout
 There are a few major sections to the code:
 * _info.cukes.editor.ide_: This is the source code for the actual Eclipse plugin.
