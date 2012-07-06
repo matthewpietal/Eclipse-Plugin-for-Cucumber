@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/info.cukes.editor.feature_3.0.0.201203261537.jar" id="info.cukes.editor.feature" version="3.0.0.201203261537">
-      <category name="info.cukes.editor.ide.site.category"/>
+   <feature url="features/info.cukes.editor.feature_3.0.0.201207061105.jar" id="info.cukes.editor.feature" version="3.0.0.201207061105">
+      <category name="cucumber_editor"/>
    </feature>
-   <category-def name="info.cukes.editor.ide.site.category" label="Cucumber Editor"/>
+   <category-def name="cucumber_editor" label="Cucumber Editor"/>
 </site>
