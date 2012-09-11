@@ -13,6 +13,7 @@ package info.cukes.editor;
 
 import info.cukes.editor.annotation.ScenarioAnnotationSearch;
 import info.cukes.editor.completion.ScenarioCompletionProcessor;
+import info.cukes.editor.formatting.CucumberFormatter;
 import info.cukes.editor.partition.CucumberPartitionScanner;
 import info.cukes.editor.reconciler.ScenarioReconcileStrategy;
 import info.cukes.editor.scanner.CommentScanner;
@@ -25,10 +26,13 @@ import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.IDocumentExtension3;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
+import org.eclipse.jface.text.formatter.IContentFormatter;
+import org.eclipse.jface.text.formatter.MultiPassContentFormatter;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.reconciler.IReconciler;
@@ -52,6 +56,20 @@ public class CucumberConfiguration extends SourceViewerConfiguration {
     public CucumberConfiguration(ColorManager colorManager, ScenarioAnnotationSearch scenarioAnnotationSearch) {
         this.colorManager = colorManager;
         this.scenarioAnnotationSearch = scenarioAnnotationSearch;
+    }
+
+    @Override
+    public IContentFormatter getContentFormatter(ISourceViewer sourceViewer) {
+        MultiPassContentFormatter formatter = new MultiPassContentFormatter(IDocumentExtension3.DEFAULT_PARTITIONING,
+            IDocument.DEFAULT_CONTENT_TYPE);
+
+        CucumberFormatter cukeFormatter = new CucumberFormatter();
+        formatter.setMasterStrategy(cukeFormatter);
+
+        formatter.setSlaveStrategy(cukeFormatter, CucumberPartitionScanner.FEATURE);
+        formatter.setSlaveStrategy(cukeFormatter, CucumberPartitionScanner.SCENARIO);
+
+        return formatter;
     }
 
     public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {

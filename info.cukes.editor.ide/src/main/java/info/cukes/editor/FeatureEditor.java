@@ -28,6 +28,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IRegion;
+import org.eclipse.jface.text.source.ISourceViewer;
+import org.eclipse.jface.text.source.SourceViewer;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IStorageEditorInput;
@@ -74,57 +76,73 @@ public class FeatureEditor extends TextEditor {
     protected void createActions() {
         super.createActions();
 
-        Action action = new ContentAssistAction(Platform.getResourceBundle(Activator.getContext().getBundle()),
+        /*
+         * Hook in content assist action.
+         */
+        {
+            Action action = new ContentAssistAction(Platform.getResourceBundle(Activator.getContext().getBundle()),
+
             "ContentAssistProposal.", this);
-        String id = ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS;
-        action.setActionDefinitionId(id);
-        setAction("ContentAssistProposal", action);
-        markAsStateDependentAction("ContentAssistProposal", true);
+            String id = ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS;
+            action.setActionDefinitionId(id);
+            setAction("ContentAssistProposal", action);
+            markAsStateDependentAction("ContentAssistProposal", true);
+        }
 
-        action = new OpenAction(getEditorSite()) {
-            public void run(org.eclipse.jface.text.ITextSelection selection) {
-                try {
-                    IDocument doc = getSourceViewer().getDocument();
+        /*
+         * Add action to support "F3" jump to definition
+         */
+        {
+            Action action = new OpenAction(getEditorSite()) {
+                public void run(org.eclipse.jface.text.ITextSelection selection) {
+                    try {
+                        IDocument doc = getSourceViewer().getDocument();
 
-                    int line = doc.getLineOfOffset(selection.getOffset());
-                    List<IAnnotation> matches = scenarioAnnotationSearch.search(getSourceViewer(), line);
+                        int line = doc.getLineOfOffset(selection.getOffset());
+                        List<IAnnotation> matches = scenarioAnnotationSearch.search(getSourceViewer(), line);
 
-                    if (matches.size() > 0) {
+                        if (matches.size() > 0) {
 
-                        IRegion lineRegion = doc.getLineInformation(line);
+                            IRegion lineRegion = doc.getLineInformation(line);
 
-                        String currentLine = getSourceViewer().getDocument().get(lineRegion.getOffset(),
-                            lineRegion.getLength());
+                            String currentLine = getSourceViewer().getDocument().get(lineRegion.getOffset(),
+                                lineRegion.getLength());
 
-                        String trimmedLine = currentLine.trim();
-                        int firstSpaceIndex = trimmedLine.indexOf(" ");
+                            String trimmedLine = currentLine.trim();
+                            int firstSpaceIndex = trimmedLine.indexOf(" ");
 
-                        String stepText = "";
-                        if (firstSpaceIndex != -1) {
-                            stepText = trimmedLine.substring(firstSpaceIndex).trim();
-                        } else {
-                            return;
-                        }
+                            String stepText = "";
+                            if (firstSpaceIndex != -1) {
+                                stepText = trimmedLine.substring(firstSpaceIndex).trim();
+                            } else {
+                                return;
+                            }
 
-                        for (IAnnotation annotation : matches) {
-                            IMemberValuePair[] pair = annotation.getMemberValuePairs();
-                            Pattern stepPattern = Pattern.compile((String) pair[0].getValue());
+                            for (IAnnotation annotation : matches) {
+                                IMemberValuePair[] pair = annotation.getMemberValuePairs();
+                                Pattern stepPattern = Pattern.compile((String) pair[0].getValue());
 
-                            if (stepPattern.matcher(stepText).matches()) {
-                                super.run(new Object[] {annotation});
-                                break;
+                                if (stepPattern.matcher(stepText).matches()) {
+                                    super.run(new Object[] {annotation});
+                                    break;
+                                }
                             }
                         }
+                    } catch (BadLocationException e) {
+                        Activator.getLogservice().log(LogService.LOG_ERROR, e.getMessage());
+                    } catch (JavaModelException e) {
+                        Activator.getLogservice().log(LogService.LOG_ERROR, e.getMessage());
                     }
-                } catch (BadLocationException e) {
-                    Activator.getLogservice().log(LogService.LOG_ERROR, e.getMessage());
-                } catch (JavaModelException e) {
-                    Activator.getLogservice().log(LogService.LOG_ERROR, e.getMessage());
-                }
+                };
             };
-        };
-        action.setActionDefinitionId("org.eclipse.jdt.ui.edit.text.java.open.editor");
-        setAction("OpenJavaElement", action);
-        markAsStateDependentAction("OpenJavaElement", true);
+            action.setActionDefinitionId("org.eclipse.jdt.ui.edit.text.java.open.editor");
+            setAction("OpenJavaElement", action);
+            markAsStateDependentAction("OpenJavaElement", true);
+        }
+    }
+
+    public void format() {
+        final SourceViewer viewer = (SourceViewer) getSourceViewer();
+        viewer.doOperation(ISourceViewer.FORMAT);
     }
 }

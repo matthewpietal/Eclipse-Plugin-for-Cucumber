@@ -19,5 +19,27 @@
             extensions="feature">
       </factory>
    </extension>
+   <extension
+         point="org.eclipse.jdt.core.codeFormatter">
+      <codeFormatter
+            class="info.cukes.editor.ide.codeFormatter1">
+      </codeFormatter>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="info.cukes.editor.ide.command.format"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+F">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="info.cukes.editor.formatting.FormatHandler"
+            id="info.cukes.editor.ide.command.format"
+            name="Format">
+      </command>
+   </extension>
 
 </plugin>
